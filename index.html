@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cortex Dynamics - Neuro-Controlled Prosthetics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #e8e8e8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #fff 0%, #a0a0a0 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a0a0a0 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .cta-button {
+                font-size: 0.75rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 8rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .neural-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            color: #a0a0a0;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .primary-cta {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #c0c0c0 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .primary-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.25);
+        }
+
+        .secondary-cta {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: #e8e8e8;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .secondary-cta:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #606060;
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+                opacity: 0.7;
+            }
+        }
+
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            stroke: #606060;
+        }
+
+        /* About Section */
+        .about {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            letter-spacing: -1px;
+        }
+
+        .about h2 .accent {
+            background: linear-gradient(135deg, #ffffff 0%, #b0b0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-text {
+            color: #c0c0c0;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text strong {
+            color: #e8e8e8;
+            font-weight: 600;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .features-list li {
+            padding: 1rem 0;
+            color: #a0a0a0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list li::before {
+            content: '→';
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .about-visual {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        .about-visual svg {
+            width: 80%;
+            max-width: 250px;
+            position: relative;
+            z-index: 1;
+            stroke: #ffffff;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        @media (max-width: 1024px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Technology Section */
+        .technology {
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .pipeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pipeline-step {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .pipeline-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+        }
+
+        .pipeline-step:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            font-size: 0.85rem;
+            color: #606060;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .step-description {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .pipeline-arrow {
+            display: none;
+        }
+
+        @media (min-width: 1025px) {
+            .pipeline {
+                grid-template-columns: repeat(3, 1fr);
+                position: relative;
+            }
+
+            .pipeline-arrow {
+                display: block;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #404040;
+                font-size: 2rem;
+                font-weight: 300;
+            }
+
+            .pipeline-arrow.arrow-1 {
+                left: calc(33.333% - 30px);
+            }
+
+            .pipeline-arrow.arrow-2 {
+                left: calc(66.666% - 30px);
+            }
+        }
+
+        /* Open Source Section */
+        .open-source {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .repos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .repo-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .repo-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .repo-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .repo-icon {
+            font-size: 1.5rem;
+        }
+
+        .repo-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0;
+        }
+
+        .repo-description {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 1.5rem;
+        }
+
+        .repo-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .repo-link:hover {
+            gap: 0.8rem;
+        }
+
+        .repo-link::after {
+            content: '→';
+        }
+
+        /* Team Section */
+        .team {
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .team-members {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .member-avatar {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #606060;
+        }
+
+        .member-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-bio {
+            color: #808080;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Contact/CTA Section */
+        .contact {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            padding: 8rem 2rem;
+        }
+
+        .contact h2 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .contact p {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            text-align: center;
+            color: #606060;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #e8e8e8;
+        }
+
+        /* Scroll animations */
+        .scroll-fade {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scroll-fade.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section {
+                padding: 4rem 2rem;
+            }
+
+            .hero {
+                padding-top: 6rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-cta-group {
+                flex-direction: column;
+            }
+
+            .primary-cta,
+            .secondary-cta {
+                width: 100%;
+            }
+
+            .step-number {
+                font-size: 0.75rem;
+            }
+
+            .pipeline-arrow {
+                display: none !important;
+            }
+
+            .contact {
+                padding: 4rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav>
+            <div class="logo">Cortex Dynamics</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#open-source">Open Source</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <a href="#contact" class="cta-button">Get in Touch</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="neural-canvas" class="neural-canvas"></canvas>
+        <div class="hero-content fade-in">
+            <h1>
+                <span class="gradient-text">Bridging</span> Thought<br>and Motion
+            </h1>
+            <p class="subtitle">
+                Neural interfaces for next-generation prosthetic control. <br>
+                Direct intent to action. Real-time neural decoding at scale.
+            </p>
+            <div class="hero-cta-group">
+                <a href="#contact" class="primary-cta">Start a Conversation</a>
+                <a href="https://github.com/Cortex-Dynamics" target="_blank" rel="noopener noreferrer" class="secondary-cta">Explore Our Work</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M19 12l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about section" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="scroll-fade">
+                    <h2>
+                        The future of <span class="accent">human movement</span> starts here
+                    </h2>
+                    <p class="about-text">
+                        At Cortex Dynamics, we're solving one of the hardest problems in neurotechnology:
+                        <strong>translating neural intent into precise prosthetic control</strong>.
+                    </p>
+                    <p class="about-text">
+                        Using advanced machine learning, real-time signal processing, and proprietary neural decoding algorithms,
+                        we've built the infrastructure to make direct brain-to-prosthetic interfaces a practical reality.
+                    </p>
+                    <ul class="features-list">
+                        <li>Real-time EMG signal processing and noise filtering</li>
+                        <li>Deep learning-based neural intent decoding</li>
+                        <li>Sub-100ms latency prosthetic control</li>
+                        <li>Adaptive algorithms that learn from user behavior</li>
+                        <li>Fully open-source SDK and simulation platform</li>
+                    </ul>
+                </div>
+                <div class="about-visual scroll-fade">
+                    <svg viewBox="0 0 200 200" width="200" height="200">
+                        <!-- Neural network visualization -->
+                        <circle cx="50" cy="50" r="8" opacity="0.8"/>
+                        <circle cx="100" cy="50" r="8" opacity="0.8"/>
+                        <circle cx="150" cy="50" r="8" opacity="0.8"/>
+                        <circle cx="50" cy="100" r="8" opacity="0.8"/>
+                        <circle cx="100" cy="100" r="10" opacity="1"/>
+                        <circle cx="150" cy="100" r="8" opacity="0.8"/>
+                        <circle cx="50" cy="150" r="8" opacity="0.8"/>
+                        <circle cx="100" cy="150" r="8" opacity="0.8"/>
+                        <circle cx="150" cy="150" r="8" opacity="0.8"/>
+
+                        <!-- Connections -->
+                        <line x1="50" y1="50" x2="100" y2="100" opacity="0.4"/>
+                        <line x1="100" y1="50" x2="100" y2="100" opacity="0.4"/>
+                        <line x1="150" y1="50" x2="100" y2="100" opacity="0.4"/>
+                        <line x1="50" y1="100" x2="100" y2="100" opacity="0.4"/>
+                        <line x1="150" y1="100" x2="100" y2="100" opacity="0.4"/>
+                        <line x1="100" y1="100" x2="50" y2="150" opacity="0.4"/>
+                        <line x1="100" y1="100" x2="100" y2="150" opacity="0.4"/>
+                        <line x1="100" y1="100" x2="150" y2="150" opacity="0.4"/>
+
+                        <!-- Animated pulse -->
+                        <circle cx="100" cy="100" r="10" opacity="0.8">
+                            <animate attributeName="r" from="10" to="20" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology section" id="technology">
+        <div class="container">
+            <h2 class="section-title scroll-fade">Our Technology Pipeline</h2>
+            <p class="section-subtitle scroll-fade">
+                From biological signal to motor control—our integrated stack handles the entire neural interface pipeline
+            </p>
+
+            <div class="pipeline">
+                <div class="pipeline-step scroll-fade">
+                    <div class="step-number">01 / Signal Acquisition</div>
+                    <h3 class="step-title">EMG Sensing</h3>
+                    <p class="step-description">
+                        High-fidelity surface and intramuscular electromyography acquisition with advanced noise filtering and artifact rejection.
+                    </p>
+                </div>
+
+                <div class="pipeline-arrow arrow-1">→</div>
+
+                <div class="pipeline-step scroll-fade">
+                    <div class="step-number">02 / Neural Decoding</div>
+                    <h3 class="step-title">Intent Recognition</h3>
+                    <p class="step-description">
+                        Real-time deep learning inference to decode user intent from multi-channel neural signals. Sub-100ms latency.
+                    </p>
+                </div>
+
+                <div class="pipeline-arrow arrow-2">→</div>
+
+                <div class="pipeline-step scroll-fade">
+                    <div class="step-number">03 / Motor Control</div>
+                    <h3 class="step-title">Prosthetic Actuation</h3>
+                    <p class="step-description">
+                        Precise servo control algorithms that translate decoded intent into natural, adaptive prosthetic movements.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Open Source Section -->
+    <section class="open-source section" id="open-source">
+        <div class="container">
+            <h2 class="section-title scroll-fade">Open Source Infrastructure</h2>
+            <p class="section-subtitle scroll-fade">
+                Our core tools are open source. Building the future requires transparency and collaboration.
+            </p>
+
+            <div class="repos-grid">
+                <a href="https://github.com/Cortex-Dynamics/Cortex-SDK" target="_blank" rel="noopener noreferrer" class="repo-card scroll-fade">
+                    <div class="repo-header">
+                        <span class="repo-icon">📦</span>
+                        <h3 class="repo-name">cortex-sdk</h3>
+                    </div>
+                    <p class="repo-description">
+                        Complete Python SDK for neural signal processing, feature extraction, and model inference. The foundation of our platform.
+                    </p>
+                    <a href="https://github.com/Cortex-Dynamics/Cortex-SDK" target="_blank" rel="noopener noreferrer" class="repo-link">View on GitHub</a>
+                </a>
+
+                <a href="https://github.com/Cortex-Dynamics/neural-decode" target="_blank" rel="noopener noreferrer" class="repo-card scroll-fade">
+                    <div class="repo-header">
+                        <span class="repo-icon">🧠</span>
+                        <h3 class="repo-name">neural-decode</h3>
+                    </div>
+                    <p class="repo-description">
+                        Pre-trained neural decoding models for EMG-to-intent translation. Optimized for real-time inference on edge devices.
+                    </p>
+                    <a href="https://github.com/Cortex-Dynamics/neural-decode" target="_blank" rel="noopener noreferrer" class="repo-link">View on GitHub</a>
+                </a>
+
+                <a href="https://github.com/Cortex-Dynamics/Prosthetic-Sim" target="_blank" rel="noopener noreferrer" class="repo-card scroll-fade">
+                    <div class="repo-header">
+                        <span class="repo-icon">🤖</span>
+                        <h3 class="repo-name">prosthetic-sim</h3>
+                    </div>
+                    <p class="repo-description">
+                        Physics-based simulation environment for testing neural control algorithms before deployment on real hardware.
+                    </p>
+                    <a href="https://github.com/Cortex-Dynamics/Prosthetic-Sim" target="_blank" rel="noopener noreferrer" class="repo-link">View on GitHub</a>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team section" id="team">
+        <div class="container">
+            <h2 class="section-title scroll-fade">Leadership</h2>
+
+            <div class="team-members">
+                <div class="team-member scroll-fade">
+                    <div class="member-avatar">👨‍💼</div>
+                    <h3 class="member-name">Founder & CEO</h3>
+                    <p class="member-role">ML Engineer • Neurotechnology Researcher</p>
+                    <p class="member-bio">
+                        PhD in Machine Learning with focus on neural signal processing.
+                        Previously built ML infrastructure at leading AI companies.
+                        Obsessed with making brain-computer interfaces practical.
+                    </p>
+                </div>
+            </div>
+
+            <p style="text-align: center; color: #606060; margin-top: 3rem; font-size: 0.95rem;">
+                We're hiring world-class engineers, neuroscientists, and product builders.<br>
+                <a href="mailto:careers@cortex-dynamics.io" style="color: #a0a0a0; text-decoration: none; font-weight: 600;">Join us</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="scroll-fade">Let's Build the Future Together</h2>
+            <p class="scroll-fade">
+                Interested in partnerships, investments, or collaboration? We'd love to hear from you.
+            </p>
+            <div class="contact-buttons">
+                <a href="mailto:hello@cortex-dynamics.io" class="primary-cta scroll-fade">Email Us</a>
+                <a href="https://github.com/Cortex-Dynamics" target="_blank" rel="noopener noreferrer" class="secondary-cta scroll-fade">GitHub</a>
+                <a href="https://twitter.com/cortex_dynamics" target="_blank" rel="noopener noreferrer" class="secondary-cta scroll-fade">Twitter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Cortex Dynamics, Inc. All rights reserved.</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="#top">Back to top</a>
+        </p>
+    </footer>
+
+    <script>
+        // Neural canvas animation
+        const canvas = document.getElementById('neural-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Particle system for neural pathways
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height * 0.5; // Keep in hero area
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 1;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height * 0.5) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            const particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.fillStyle = 'rgba(10, 10, 10, 0.1)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach((particle, index) => {
+                    particle.update();
+                    particle.draw();
+
+                    // Draw connections
+                    particles.forEach((otherParticle, otherIndex) => {
+                        if (index < otherIndex) {
+                            const dx = particle.x - otherParticle.x;
+                            const dy = particle.y - otherParticle.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+
+                            if (distance < 150) {
+                                ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance / 150)})`;
+                                ctx.lineWidth = 0.5;
+                                ctx.beginPath();
+                                ctx.moveTo(particle.x, particle.y);
+                                ctx.lineTo(otherParticle.x, otherParticle.y);
+                                ctx.stroke();
+                            }
+                        }
+                    });
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        // Scroll reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-fade').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll offset for fixed header
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#top') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
