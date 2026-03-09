@@ -507,9 +507,15 @@
 
         .repos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             margin-top: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .repos-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .repo-card {
@@ -918,7 +924,7 @@
 
             <div class="team-members">
                 <div class="team-member scroll-fade">
-                    <div class="member-avatar">👨‍💼</div>
+                    <img src="jacob.png" alt="Jacob Shahatit" class="member-avatar" style="object-fit: cover;">
                     <h3 class="member-name">Founder & CEO</h3>
                     <p class="member-role">CS @ UC Berkeley • Neurotech@Berkeley PM • Builder</p>
                     <p class="member-bio">
